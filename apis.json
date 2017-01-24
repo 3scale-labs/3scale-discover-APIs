@@ -1,0 +1,89 @@
+{
+  "name": "World Company",
+  "description": "This is an inventory of APIs available as part of the API World Company network.",
+  "image": "http://i.imgur.com/ntV92b4.png",
+  "tags": [
+    "Telecommunications",
+    "Communications"
+  ],
+  "created": "2017-01-24",
+  "modified": "2017-01-24",
+  "url": "http://worldcompany.com/apis.json",
+  "specificationVersion": "0.14",
+  "apis": [
+    {
+      "name": "SMS API",
+      "description": "Short Message Service (SMS) is a text messaging service component of most telephone, World Wide Web, and mobile telephony systems. It uses standardized communication protocols to enable mobile phone devices to exchange short text messages. We provide an API for it to let you send SMS to your customers.",
+      "X-3scale":{
+        "service_id":12345,
+        "swagger_id":"ipaapi"
+      },
+      "image": "https://enterprisedemo.3scale.net/images/circle2.png",
+      "humanURL": "https://enterprisedemo.3scale.net/",
+      "baseURL": "http://sms.3scale.net",
+      "tags": [
+        "sms",
+        "text"
+      ],
+      "properties": [
+        {
+          "type": "X-signup",
+          "url": "https://enterprisedemo.3scale.net/"
+        },
+        {
+          "type": "Swagger",
+          "url": "https://enterprisedemo.3scale.net/swagger/spec/sms2_0.json"
+        }
+      ],
+      "contact": [
+        {
+          "FN": "World Company",
+          "email": "info@worldcompany.com",
+          "X-twitter": "worldcompany"
+        }
+      ]
+    },
+    {
+      "name": "Voice API",
+      "description": "Voice over Internet Protocol is a methodology and group of technologies for the delivery of voice communications and multimedia sessions over Internet Protocol (IP) networks, such as the Internet. The terms Internet telephony, broadband telephony, and broadband phone service specifically refer to the provisioning of communications services (voice, fax, SMS, voice-messaging) over the public Internet.",
+      "X-3scale":{
+        "service_id":12345,
+        "swagger_id":"ipaapi"
+      },
+      "image": "https://enterprisedemo.3scale.net/images/circle1.png",
+      "humanURL": "https://enterprisedemo.3scale.net/",
+      "baseURL": "http://sms.3scale.net",
+      "tags": [
+        "voice",
+        "VoIP",
+        "Telephony",
+        "phone"
+      ],
+      "properties": [
+        {
+          "type": "X-signup",
+          "url": "https://enterprisedemo.3scale.net/"
+        },
+        {
+          "type": "Swagger",
+          "url": "https://enterprisedemo.3scale.net/swagger/spec/sms2_0.json"
+        }
+      ],
+      "contact": [
+        {
+          "FN": "World Company",
+          "email": "info@worldcompany.com",
+          "X-twitter": "worldcompany"
+        }
+      ]
+    }
+  ],
+  "include": [],
+  "maintainers": [
+    {
+      "FN": "World Company",
+      "email": "info@worldcompany.com",
+      "X-twitter": "worldcompany"
+    }
+  ]
+}

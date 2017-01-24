@@ -1,0 +1,226 @@
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+<style media="screen">
+  .categoryCount {
+    color: lightgrey;
+  }
+
+  /*** custom checkboxes ***/
+  /* https://codepen.io/jamesbarnett/pen/yILjk */
+
+  input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+  input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+  }
+
+  input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
+  input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+  input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
+  input[type=checkbox]:checked + label:before { letter-spacing: 10px; } /* allow space for check mark */
+
+  label{
+    text-transform: none;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  #search_input{
+    height: 45px;
+    font-size: 20px;
+    line-height: 24px;
+    border-radius: 6px 0 0 6px;
+    border-right: 0;
+    width: 90%;
+  }
+
+  #search_submit{
+    width: 50px;
+    height: 45px;
+    font-size: x-large;
+    border-radius: 0 6px 6px 0;
+    position: absolute;
+  }
+</style>
+
+<div id="content"></div>
+
+<script id="containerTpl" type="text/template">
+<h1>APIs available</h1>
+  <div class="row">
+    <div class="col-md-8">
+          {{> searchBar}}
+          {{> apiList}}
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          {{> categories}}
+        </div> <!-- end of panel-body -->
+      </div> <!-- end of panel-default -->
+     </div> <!-- end of col-md-4 -->
+    </div> <!-- end of col-md-8 -->
+  </div>
+</script>
+
+<script id="searchBarTpl" type="text/template">
+  <div class = "panel panel-default">
+    <div class="panel-body">
+        <input class="xlarge" id="search_input" name="search" placeholder="Search APIs on sms, photo, user etc..." dir="ltr" spellcheck="false" autofocus="" type="text">
+        <button class="btn btn-large btn-warning" id="search_submit" type="submit" value="search"> <i class="fa fa-search" aria-hidden="true"></i></button>
+    </div>
+  </div>
+</script>
+
+<script id="apiListTpl" type="text/template">
+  <div id="apilist">
+    {{#each apis}}
+     <a href="/apidetails?service_id={{X-3scale.service_id}}">
+        <div class = "panel panel-default">
+          <div class="panel-body">
+            <div class= "col-md-2">  <!-- Comment this div if you don't want to show images-->
+              {{#if this.image}}
+                <img src="{{this.image}}" alt="{{this.name}} logo" class="img-responsive center-block"/>
+                {{else}}
+                  <img src="http://apis.io/img/default.svg" alt="{{this.name}} logo" class="img-responsive center-block"/>
+              {{/if}}
+            </div>
+            <div class= "col-md-10">
+              <h2>{{ this.name }}</h2>
+              <p>{{ this.description }} </p>
+              {{#each this.tags}}
+                <span class="label label-default">{{.}}</span>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </a>
+    {{/each}}
+  </div>
+</script>
+
+<script id="categoriesTpl" type="text/template">
+  <div id="categories">
+      <h2>Categories</h2>
+        <ul class="list-group checked-list-box">
+          {{#each categories}}
+              <li class="list-group-item" data-style="button" data-color="info"><input type="checkbox" id="box{{@index}}" class="categoryCheckbox" value="{{name}}"> <label for="box{{@index}}">{{ name }} <span class="categoryCount">({{nb}})</span></label></li>
+          {{/each}}
+        <ul>
+  </div>
+</script>
+
+    <script>
+    var APIS = []
+    var paging_skip = 0
+    var paging_limit = 5
+    var paging_total = 0
+
+    $(document).ready(function(){
+      Handlebars.registerPartial("searchBar", $("#searchBarTpl").html());
+      Handlebars.registerPartial("categories", $("#categoriesTpl").html());
+      Handlebars.registerPartial("apiList", $("#apiListTpl").html());
+
+      $.getJSON('apis.json').done(function(data) {
+        APIS = data.apis
+        data.categories = getTags(data.apis)
+        data.apis = _.first(APIS,paging_limit)
+
+        console.log(data)
+        paging_total = APIS.length
+
+        console.log("DATA APIS",data.apis.length)
+        var template = $("#containerTpl").html();
+        var stone = Handlebars.compile(template)(data);
+        $("#content").html(stone);
+      })
+
+      $(document).on('click',"#search_submit",function(e){
+        e.preventDefault();
+        var regex = new RegExp($("#search_input").val().trim(), "i")
+        compileAPIsListTemplate(filterArrayByRegEx(APIS,regex))
+      })
+
+      $( "#searchBarForm" ).submit(function( e ) {
+        e.preventDefault();
+        var regex = new RegExp($("#search_input").val().trim(), "i")
+        compileAPIsListTemplate(filterArrayByRegEx(APIS,regex))
+      });
+
+      $(document).on('keyup',"#search_input",function(event){
+        event.preventDefault()
+          var regex = new RegExp($("#search_input").val().trim(), "i")
+          compileAPIsListTemplate(filterArrayByRegEx(APIS,regex))
+      })
+
+      $(document).on('click',':checkbox',function(event){
+        var tags = $(':checkbox:checked').map(function() {
+           return $(this).val();
+        });
+        if(tags.length==0){
+          compileAPIsListTemplate(_.first(APIS,paging_limit));
+        }else{
+          compileAPIsListTemplate(filterArrayByTags(APIS,tags));
+        }
+      })
+    }) //end of document.ready
+
+    //Triggers when reach end of page
+    $(window).scroll(function() {
+      if ($(window).scrollTop() + $(window).height() > $(document).height() - 50) {
+          incrementLimit();
+      }
+    });
+
+    //Filter array when name, or description matche regex
+    function filterArrayByRegEx(arr, regex){
+      return _.filter(arr, function(obj){ return obj.name.match(regex) || obj.description.match(regex)});
+    }
+
+    function filterArrayByTags(arr, tagsArr){
+      return _.filter(arr, function(obj){ return _.intersection(obj.tags,tagsArr).length > 0});
+    }
+
+    //Apply list of APIs to template
+    function compileAPIsListTemplate(arr){
+      var template = $('#apiListTpl').html();
+      var data = {}
+      data.apis = arr
+      var stone = Handlebars.compile(template)(data);
+      $('#apilist').html(stone);
+    }
+
+    function allTags(arr){
+      return _.uniq(APIS.reduceRight(function(a, b) {
+          return a.concat(b.tags);
+      }, [])).sort();
+    }
+
+    function getTags(arr){
+      return _.map(_.groupBy(_.flatten(_.pluck(arr, 'tags')).sort(), function(item){
+          return item;
+      }),function(value,key){
+        return {
+          name: key,
+          nb: value.length
+        }
+      });
+    }
+
+    function incrementLimit(){
+      if(paging_skip >= (paging_total)){ //reached the limit
+        return false
+      }else{
+        skip = paging_skip + paging_limit
+        paging_skip=skip
+        compileAPIsListTemplate(_.first(APIS,skip));
+      }
+    }
+    </script>

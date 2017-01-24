@@ -1,0 +1,229 @@
+
+{% active_docs version: "2.0" %}
+<div id="content"></div>
+
+<style media="screen">
+  #resources_container{
+    padding-bottom: 0;
+  }
+</style>
+
+<script id="leftmenuTpl" type="text/template">
+{% raw %}
+  <h2>{{name}}</h2>
+  <hr>
+  <ul class="nav nav-pills nav-stacked">
+    <li><a href="#about">About</a></li>
+    <li><a href="#documentation">Documentation</a></li>
+    <li><a href="#signup">Signup</a></li>
+    <li><a href="#terms">Terms and Conditions</a></li>
+    <li><a href="#support">Support</a></li>
+  </ul>
+{% endraw %}
+</script>
+
+<script id="aboutTpl" type="text/template">
+{% raw %}
+  <div id="about">
+    <h2>About</h2>
+      <ul class="list-group checked-list-box">
+        <p>
+          {{description}}
+        </p>
+      <ul>
+  </div>
+{% endraw %}
+</script>
+
+<script id="documentationTpl" type="text/template">
+{% raw %}
+  <div id="documentation">
+    <h2>Documentation</h2>
+      <p id="swagger-ui-containers"></p>
+  </div>
+{% endraw %}
+</script>
+
+<script id="signupTpl" type="text/template">
+{% raw %}
+  <div id="signup">
+    <h2>Signup</h2>
+      <p>
+        Lorem ipsum dolor sit amet, his utamur abhorreant contentiones ex, detraxit referrentur cu vim. Vim nulla denique efficiendi te, no nobis iudico debitis ius. Eum putant everti oportere te, tantas eirmod gloriatur pri no, eu has essent maiestatis. Inermis petentium reformidans ius ei, id eligendi deterruisset has. Sea ea modus virtute albucius.
+      </p>
+  </div>
+{% endraw %}
+</script>
+
+<script id="termsTpl" type="text/template">
+{% raw %}
+  <div id="terms">
+    <h2>Terms and Conditions</h2>
+      <p>
+        Lorem ipsum dolor sit amet, his utamur abhorreant contentiones ex, detraxit referrentur cu vim. Vim nulla denique efficiendi te, no nobis iudico debitis ius. Eum putant everti oportere te, tantas eirmod gloriatur pri no, eu has essent maiestatis. Inermis petentium reformidans ius ei, id eligendi deterruisset has. Sea ea modus virtute albucius.
+      </p>
+  </div>
+{% endraw %}
+</script>
+
+<script id="supportTpl" type="text/template">
+{% raw %}
+  <div id="support">
+    <h2>Support</h2>
+      <p>
+        Lorem ipsum dolor sit amet, his utamur abhorreant contentiones ex, detraxit referrentur cu vim. Vim nulla denique efficiendi te, no nobis iudico debitis ius. Eum putant everti oportere te, tantas eirmod gloriatur pri no, eu has essent maiestatis. Inermis petentium reformidans ius ei, id eligendi deterruisset has. Sea ea modus virtute albucius.
+      </p>
+  </div>
+{% endraw %}
+</script>
+
+<script id="errorTpl" type="text/template">
+{% raw %}
+  <div>
+  <div class="alert alert-danger" role="alert">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <span class="sr-only">Error:</span>
+        {{message}}
+    </div>
+  </div>
+{% endraw %}
+</script>
+
+
+<script id="detailsPanelTpl" type="text/template">
+{% raw %}
+  {{> about}}
+  <hr>
+  {{> documentation}}
+  <hr>
+  {{> signup}}
+  <hr>
+  {{> terms}}
+  <hr>
+  {{> support}}
+{% endraw %}
+</script>
+
+<script id="containerTpl" type="text/template">
+{% raw %}
+  <div class="row">
+    <div class="col-md-3" style="margin-top: 40px;">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          {{> leftMenu}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h4><a href="/apilist">APIs</a> >> {{name}}</h4>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div id="rightPanel"></div>
+            {{> rightPanel}}
+          </div>
+      </div>
+    </div> <!-- end of col-md-8 -->
+  </div>
+{% endraw %}
+</script>
+
+<script>
+  var APIS = []
+  var API = []
+
+  $(document).ready(function(){
+     Handlebars.registerPartial("about", $("#aboutTpl").html());
+     Handlebars.registerPartial("documentation", $("#documentationTpl").html());
+     Handlebars.registerPartial("signup", $("#signupTpl").html());
+     Handlebars.registerPartial("terms", $("#termsTpl").html());
+     Handlebars.registerPartial("support", $("#supportTpl").html());
+     Handlebars.registerPartial("rightPanel", $("#detailsPanelTpl").html());
+     Handlebars.registerPartial("leftMenu", $("#leftmenuTpl").html());
+     Handlebars.registerPartial("error", $("#errorTpl").html());
+
+    $("#swagger-ui-container").parent().remove();
+
+    var service_id = Number(extractServiceID())
+    var url = 'apis.json'
+//4a.function creation
+// var slingshot = function (url, tplId, anchor) {
+    $.getJSON(url).done(function(data) {
+      console.log("DONE");
+      console.log(data)
+      APIS=data.apis
+
+      console.log("SERVICE_ID",service_id)
+
+      API = filterArraybyThreescaleServiceId(APIS,service_id)
+
+      if(API.length ==0){
+        var template = $("#errorTpl").html();
+        var stone = Handlebars.compile(template)({message:"No API was found."});
+        $("#content").html(stone);
+      }else{
+        console.log("AAAPI",API)
+        //Display in template
+        var template = $("#containerTpl").html();
+        var stone = Handlebars.compile(template)(API[0]);
+        $("#content").html(stone);
+
+		var specSystemName = API[0]['X-3scale']['swagger_id'];
+      	var domId = "swagger-ui-container-" + specSystemName;
+      	loadSwagger(specSystemName, domId);
+      }
+     });
+
+  })
+
+  function filterArraybyThreescaleServiceId(arr,service_id){
+    return _.filter(arr, function(obj){ if(typeof obj["X-3scale"] != "undefined"){return obj["X-3scale"].service_id === service_id}});
+  }
+
+  function extractServiceID(){
+    var url = window.location.href
+    var captured = /service_id=([^&]+)/.exec(url)[1]; // Value is in [1] ('384' in our case)
+    return captured;
+  }
+
+  function swaggerSectionHtml(domId) {
+    var html = '<div class="swagger-section"><div id="' + domId + '" class="swagger-ui-wrap"></div></div>'
+    return html;
+  }
+
+  function getSwaggerSpecUrl(specSystemName) {
+    // check parent location, if it's iframe
+    var loc = window.location.href == 'about:srcdoc' ? window.parent.location : window.location;
+    var url = loc.protocol+'//'+loc.hostname+(loc.port ? ':'+loc.port : '');
+    url = url + "/swagger/spec/" + specSystemName + ".json";
+    return url;
+  }
+
+  function loadSwagger(specSystemName, domId) {
+    // create DOM element
+    $("#swagger-ui-containers").append(swaggerSectionHtml(domId));
+
+    var swaggerObjName = 'swaggerUi' + specSystemName;
+    var domPreCodeId = '#' + domId + ' pre code';
+    var swaggerObj = new SwaggerUi({
+      url: getSwaggerSpecUrl(specSystemName),
+      dom_id: domId,
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      onComplete: function(swaggerApi, swaggerUi) {
+        $(domPreCodeId).each(function(i, e) {hljs.highlightBlock(e)});
+        $("#api_info").toggle(); //hide api info section
+        $(".footer").toggle(); // hide footer section
+        $(".heading h2, .options").hide();
+      },
+      onFailure: function(data) {
+        log("Unable to LoadSwaggerUI");
+      },
+      validatorUrl: null,
+      docExpansion: "list",
+      transport: function(httpClient, obj) {
+        return ApiDocsProxy.execute(httpClient, obj);
+      }
+    });
+    window[swaggerObjName] = swaggerObj;
+    window[swaggerObjName].load();
+  }
+</script>
