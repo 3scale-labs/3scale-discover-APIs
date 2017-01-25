@@ -15,8 +15,9 @@ Being able to list all your apis, and let your users search easily through them.
 You can try a working demo [here]()
 
 ## Prerequesites
-- Swagger, ActiveDocs
-- 
+
+* Swagger, ActiveDocs
+* 
 
 
 ## Build APIs.json file
@@ -49,14 +50,43 @@ Once you are done, you will be ready to upload it to your developer portal.
 
 Go under `Developer Portal` section.
 Create a new Page named `apis.json`, it has to be under `Root` section. 
-Under `Advanced options` change content-type to `application/json`
+
+Under `Advanced options`:
+
+1. change content-type to `application/json`
+2. Disable liquid tags 
 
 ![](./img/DevPortal_create_apis.json_page.png)
 
-This file will now be available under `https://YOURDOMAIN.3scale.net/apis.json`
+This file will now be available on this URL `https://YOURDOMAIN.3scale.net/apis.json`
 
 ## Display search experience
 
+We will now create a new page `apilist`.
+We recommend to place it under `Root` section.
 
+You can copy paste the content of `apilist.html` from this repo into the CMS.
 
-## More details experience
+Under `Advanced options`:
+
+1. Disable liquid tags
+
+Save and preview, you should see your list of APIs, a search box and the categories on the right.
+
+## API details experience
+
+We will now add the page `apidetails` to display more details about each API.
+This page will be displayed when user clicks on an API block in the list, they will be redirected to `/apidetails?service_id={SERVICE_ID}`.
+
+1. Create a new page `apidetails` under `Root` section.
+2. Copy paste content from `apidetails.html`
+
+Data for `About` and `Documentation` sections are loaded dynamically from `apis.json` file.
+
+Other sections have placeholders that you can easily modify, they will be common to every API. If you want to make them dynamic for each API, add more fields under `X-3scale` section of `apis.json`.
+
+## Test and customize
+
+Your discovery experience is now ready :) Congrats!
+
+The look and feel could be customize using [Bootstrap](getbootstrap.com) CSS framework. 
