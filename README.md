@@ -14,7 +14,7 @@ Being able to list all your apis, and let your users search easily through them.
 
 You can see a working demo below:
 
-![search experience](./img/searchexperience.gif)
+![search experience](./img/search.gif)
 
 ## Prerequesites
 
