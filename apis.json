@@ -19,8 +19,8 @@
         "swagger_system_name":"echo"
       },
       "image": "https://enterprisedemo.3scale.net/images/circle2.png",
-      "humanURL": "https://enterprisedemo.3scale.net/",
-      "baseURL": "http://sms.3scale.net",
+      "humanURL": "https://worldcompany.com/",
+      "baseURL": "http://sms.worldcompany.com",
       "tags": [
         "sms",
         "text"
@@ -28,11 +28,11 @@
       "properties": [
         {
           "type": "X-signup",
-          "url": "https://enterprisedemo.3scale.net/"
+          "url": "https://worldcompany.com/"
         },
         {
           "type": "Swagger",
-          "url": "https://enterprisedemo.3scale.net/swagger/spec/sms2_0.json"
+          "url": "https://worldcompany.com/swagger/spec/sms2_0.json"
         }
       ],
       "contact": [
@@ -51,8 +51,8 @@
         "swagger_system_name":"echo"
       },
       "image": "https://enterprisedemo.3scale.net/images/circle1.png",
-      "humanURL": "https://enterprisedemo.3scale.net/",
-      "baseURL": "http://sms.3scale.net",
+      "humanURL": "https://worldcompany.com/",
+      "baseURL": "http://voice.worldcompany.com",
       "tags": [
         "voice",
         "VoIP",
@@ -62,11 +62,11 @@
       "properties": [
         {
           "type": "X-signup",
-          "url": "https://enterprisedemo.3scale.net/"
+          "url": "https://worldcompany.com"
         },
         {
           "type": "Swagger",
-          "url": "https://enterprisedemo.3scale.net/swagger/spec/sms2_0.json"
+          "url": "https://worldcompany.com/swagger/spec/sms2_0.json"
         }
       ],
       "contact": [
