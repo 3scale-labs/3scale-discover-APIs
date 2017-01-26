@@ -16,7 +16,7 @@
       "description": "Short Message Service (SMS) is a text messaging service component of most telephone, World Wide Web, and mobile telephony systems. It uses standardized communication protocols to enable mobile phone devices to exchange short text messages. We provide an API for it to let you send SMS to your customers.",
       "X-3scale":{
         "service_id":12345,
-        "swagger_id":"ipaapi"
+        "swagger_system_name":"echo"
       },
       "image": "https://enterprisedemo.3scale.net/images/circle2.png",
       "humanURL": "https://enterprisedemo.3scale.net/",
@@ -48,7 +48,7 @@
       "description": "Voice over Internet Protocol is a methodology and group of technologies for the delivery of voice communications and multimedia sessions over Internet Protocol (IP) networks, such as the Internet. The terms Internet telephony, broadband telephony, and broadband phone service specifically refer to the provisioning of communications services (voice, fax, SMS, voice-messaging) over the public Internet.",
       "X-3scale":{
         "service_id":12345,
-        "swagger_id":"ipaapi"
+        "swagger_system_name":"echo"
       },
       "image": "https://enterprisedemo.3scale.net/images/circle1.png",
       "humanURL": "https://enterprisedemo.3scale.net/",

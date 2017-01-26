@@ -167,7 +167,7 @@
         var stone = Handlebars.compile(template)(API[0]);
         $("#content").html(stone);
 
-		var specSystemName = API[0]['X-3scale']['swagger_id'];
+		var specSystemName = API[0]['X-3scale']['swagger_system_name'];
       	var domId = "swagger-ui-container-" + specSystemName;
       	loadSwagger(specSystemName, domId);
       }
