@@ -56,6 +56,7 @@ Under `Advanced options`:
 
 1. Change content-type to `application/json`
 2. Make sure liquid tags are disabled
+3. Make sure layout filed is blank
 
 ![](./img/DevPortal_create_apis.json_page.png)
 
