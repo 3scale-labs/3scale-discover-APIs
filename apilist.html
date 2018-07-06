@@ -82,7 +82,7 @@
 <script id="apiListTpl" type="text/template">
   <div id="apilist">
     {{#each apis}}
-     <a href="/apidetails?service_id={{X-3scale.service_id}}">
+     <a href="/apidetails?service_id={{X-3scale.service_id}}&amp;swagger_system_name={{X-3scale.swagger_system_name}}">
         <div class = "panel panel-default">
           <div class="panel-body">
             <div class= "col-md-2">  <!-- Comment this div if you don't want to show images-->

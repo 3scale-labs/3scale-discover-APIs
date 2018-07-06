@@ -144,6 +144,7 @@
     $("#swagger-ui-container").parent().remove();
 
     var service_id = Number(extractServiceID())
+    var specSystemName = extractSystemName()
     var url = 'apis.json'
 //4a.function creation
 // var slingshot = function (url, tplId, anchor) {
@@ -153,8 +154,13 @@
       APIS=data.apis
 
       console.log("SERVICE_ID",service_id)
+      console.log("SPEC_SYSTEM_NAME", specSystemName)
 
-      API = filterArraybyThreescaleServiceId(APIS,service_id)
+      API = filterArraybyThreescaleServiceIdAndSystemName(APIS,service_id,specSystemName);
+
+      if(API.length==0){
+        API = filterArraybyThreescaleServiceId(APIS,service_id);
+      }
 
       if(API.length ==0){
         var template = $("#errorTpl").html();
@@ -167,7 +173,11 @@
         var stone = Handlebars.compile(template)(API[0]);
         $("#content").html(stone);
 
-		var specSystemName = API[0]['X-3scale']['swagger_system_name'];
+        if (!specSystemName || 0 === specSystemName.length){
+		      specSystemName = API[0]['X-3scale']['swagger_system_name'];
+          console.log("No specSystemName passed, use API: " + specSystemName);
+        }
+
       	var domId = "swagger-ui-container-" + specSystemName;
       	loadSwagger(specSystemName, domId);
       }
@@ -179,9 +189,25 @@
     return _.filter(arr, function(obj){ if(typeof obj["X-3scale"] != "undefined"){return obj["X-3scale"].service_id === service_id}});
   }
 
+  function filterArraybyThreescaleServiceIdAndSystemName(arr,service_id,specSystemName){
+    return _.filter(arr, function(obj){ if(typeof obj["X-3scale"] != "undefined"){return obj["X-3scale"].service_id === service_id  && obj["X-3scale"].swagger_system_name === specSystemName}});
+  }
+
+
   function extractServiceID(){
     var url = window.location.href
     var captured = /service_id=([^&]+)/.exec(url)[1]; // Value is in [1]
+    return captured;
+  }
+
+  function extractSystemName(){
+    var url = window.location.href
+    var captured;
+    try {
+      captured = /swagger_system_name=([^&]+)/.exec(url)[1]; // Value is in [1]
+    } catch(err) {
+      console.log("The swagger_system_name parameter was not passed");
+    }
     return captured;
   }
 
