@@ -22,7 +22,7 @@ You already have an APIs.json file to describe your API? Genius! you can already
 
 If you are not familiar with this format I encourage you look at the [specification](https://apisjson.org) first.
 
-To build your file you can use the [builder](http://apis.io/builder) available on [APIs.io](apis.io) or any IDE to produce a `.json` file.
+To build your file you can use the [builder](http://apis.io/builder) available on [APIs.io](http://apis.io) or any IDE to produce a `.json` file.
 
 For our tutorial we will use this sample [file](../apis.json)
 It has two APIs: Voice API, and SMS API.
@@ -87,4 +87,4 @@ Other sections have placeholders that you can easily modify, they will be common
 
 Your discovery experience is now ready :) Congrats!
 
-The look and feel could be customize using [Bootstrap](getbootstrap.com) CSS framework.
+The look and feel could be customize using [Bootstrap](https://getbootstrap.com) CSS framework.
