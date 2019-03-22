@@ -22,7 +22,7 @@ The API list is generated from the service name and description, separated by a 
 ## Prerequesites
 
 * 3scale account with Developer Portal
-* an OpenAPI Specification (3scale ActiveDocs) for each service
+* an OpenAPI Specification, version 2.0 (3scale ActiveDocs) for each service
 
 Currently, this module expects that Services and ActiveDocs objects will have
 the same system_name (in order to match a service with an ActiveDocs).
@@ -34,5 +34,12 @@ the [content of this file](../documentation.html).
 
 ## Usage in a CI/CD pipeline
 
-Just create and publish an ActiveDocs object and the documentation will
-appear in the documentation page of the Developer Portal.
+Just create and publish an ActiveDocs object with the same system_name of its
+corresponding service and the documentation will appear in the documentation
+page of the Developer Portal:
+
+```sh
+curl -v -X POST "https://$TENANT-admin.3scale.net/admin/api/active_docs.json" \
+     -d "access_token=$ACCESS_TOKEN" -d "name=My API" -d "system_name=my_api" \
+     --data-urlencode "body=$(cat /path/to/openapi.json)"  -d "published=true"
+```
