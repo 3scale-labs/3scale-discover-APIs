@@ -1,7 +1,11 @@
-{% cdn_asset /swagger-ui/2.2.10/swagger-ui.js %}
-{% cdn_asset /swagger-ui/2.2.10/swagger-ui.css %}
+{% content_for javascripts %}
+    {{ 'active_docs.js' | javascript_include_tag }}
+{% endcontent_for %}
 
-{% include 'shared/swagger_ui' %}
+<div class="swagger-section">
+  <div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
+  <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+</div>
 
 <div class="api-list-container" style="display: none;">
   <h1>API Catalog</h1>
@@ -29,8 +33,7 @@
     if (searchParams.has("api")) {
       var api = searchParams.get("api");
       $(".api-list-container").css("display", "none");
-      window.swaggerUi.options['url'] = services[api].url;
-      window.swaggerUi.load();
+      SwaggerUI({ url: services[api].url, dom_id: "#swagger-ui-container" });
     } else {
       $(".api-list-container").css("display", "block");
       var system_names = Object.keys(services).sort();

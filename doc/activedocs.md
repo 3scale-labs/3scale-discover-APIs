@@ -22,7 +22,7 @@ The API list is generated from the service name and description, separated by a 
 ## Prerequesites
 
 * 3scale account with Developer Portal
-* an OpenAPI Specification, version 2.0 (3scale ActiveDocs) for each service
+* an OpenAPI Specification, version 2.0 or 3.0 (3scale ActiveDocs) for each service
 
 Currently, this module expects that Services and ActiveDocs objects will have
 the same system_name (in order to match a service with an ActiveDocs).
